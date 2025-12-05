@@ -4,13 +4,14 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import br.com.borovicz.estephano.model.EstacioneMais;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class TelaEstacioneMais extends Application {
     public void start(Stage primaryStage) throws Exception {
@@ -58,6 +59,54 @@ public class TelaEstacioneMais extends Application {
         Button btLimpar = new Button("Limpar");
         btLimpar.setAlignment(Pos.CENTER);
 
+        //adicionar funcionalidade aos botoes
+
+        btRegistrarEntrada.setOnAction(event -> {
+            EstacioneMais.placaDoVeiculo = tfPlacaDoVeiculo.getText();
+            EstacioneMais.nomeDoProprietario = tfNomeDoProprietario.getText();
+            EstacioneMais.modeloDoVeiculo = tfModeloDoVeiculo.getText();
+
+            EstacioneMais.veiculoEstacionado = EstacioneMais.placaDoVeiculo + ";" + EstacioneMais.nomeDoProprietario + ";" +
+                    EstacioneMais.modeloDoVeiculo + ";" + LocalDateTime.now();
+
+            tfPlacaDoVeiculo.clear();
+            tfNomeDoProprietario.clear();
+            tfModeloDoVeiculo.clear();
+            tfPlacaDoVeiculo.requestFocus();
+        });
+
+        btRegistrarSaida.setOnAction(event -> {
+            EstacioneMais.placaDoVeiculo = tfPlacaDoVeiculo.getText();
+            EstacioneMais.nomeDoProprietario = tfNomeDoProprietario.getText();
+            EstacioneMais.modeloDoVeiculo = tfModeloDoVeiculo.getText();
+            tfPlacaDoVeiculo.clear();
+            tfNomeDoProprietario.clear();
+            tfModeloDoVeiculo.clear();
+            tfPlacaDoVeiculo.requestFocus();
+        });
+
+//        //gravar os dados de entrada
+//        Path entrada = Path.of("/Users/25203672/Documents/estacionamaisData/veiculosEstacionados.csv");
+//        String dadosVeiculosEstacionados = tfPlacaDoVeiculo.getText() + ";" + tfNomeDoProprietario.getText() + ";" +
+//                tfModeloDoVeiculo.getText() + ";" + LocalDateTime.now() + "/n";
+//        try {
+//            Files.writeString(entrada, dadosVeiculosEstacionados, StandardOpenOption.APPEND);
+//            System.out.println("veículo registrado com sucesso!");
+//        } catch (IOException erro) {
+//            System.out.println(erro.getMessage());
+//        }
+//
+//        //gravar os dados de saída
+//        Path saida = Path.of("/Users/25203672/Documents/estacionamaisData/historico.csv");
+//        String dadosHistorico = dadosVeiculosEstacionados + LocalDateTime.now() + "/n";
+//        try {
+//            Files.writeString(saida, dadosHistorico, StandardOpenOption.APPEND);
+//        } catch (IOException erro) {
+//            System.out.println(erro.getMessage());
+//        }
+
+
+
 
         //colocar os componentes no grid
 
@@ -77,11 +126,14 @@ public class TelaEstacioneMais extends Application {
 
         //criar conteúdo de resultados
         Label lblVeiculosEstacionados = new Label("Veículos estacionados:");
-        ListView listaVeiculosEstacionados = new ListView();
+        ListView lvVeiculosEstacionados = new ListView();
+        lvVeiculosEstacionados.getItems().add(EstacioneMais.veiculoEstacionado);
+        lvVeiculosEstacionados.setPrefHeight(100);
+
 
 
         //adicionar conteúdo ao vbox resultados
-        VBoxListaDeVeiculosEstacionados.getChildren().addAll(lblVeiculosEstacionados, listaVeiculosEstacionados);
+        VBoxListaDeVeiculosEstacionados.getChildren().addAll(lblVeiculosEstacionados, lvVeiculosEstacionados);
 
         //adicionar componentes ao root
         root.getChildren().add(header);
